@@ -2,5 +2,7 @@
 <resources>
 
     <string name="app_name">Cowbell</string>
+    
+    <string name="cowbell_desc">Cowbell</string>
 
 </resources>
