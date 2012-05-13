@@ -15,7 +15,9 @@ import android.widget.ImageView;
  * Activity for ringing a cowbell
  */
 public class CowbellActivity extends Activity implements SensorEventListener {
-    
+	
+	private final int TIPPING_POINT_IN_DEGREES = 30;
+	
 	private ImageView mCowbellImage;
 	private boolean mRotatedLeft;
 	private Animation mRotateToLeft;
@@ -39,13 +41,30 @@ public class CowbellActivity extends Activity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        final int CENTRE_DEGREE = 0;
         mCowbellImage = (ImageView)this.findViewById(R.id.cowbell);
         mRotatedLeft = false;
-        mRotateToLeft = AnimationUtils.loadAnimation(this, R.anim.rotate_left);
-        mRotateFromLeft = AnimationUtils.loadAnimation(this, R.anim.rotate_from_left);
+        mRotateToLeft =
+        		new CowbellRotateAnimation(
+        				CENTRE_DEGREE,
+        				TIPPING_POINT_IN_DEGREES
+        			);
+        mRotateFromLeft =
+        		new CowbellRotateAnimation(
+        				TIPPING_POINT_IN_DEGREES,
+        				CENTRE_DEGREE
+        			);
         mRotatedRight = false;
-        mRotateToRight = AnimationUtils.loadAnimation(this, R.anim.rotate_right);
-        mRotateFromRight = AnimationUtils.loadAnimation(this, R.anim.rotate_from_right);
+        mRotateToRight =
+        		new CowbellRotateAnimation(
+        				CENTRE_DEGREE,
+        				-TIPPING_POINT_IN_DEGREES
+        			);
+        mRotateFromRight =
+        		new CowbellRotateAnimation(
+        				-TIPPING_POINT_IN_DEGREES,
+        				CENTRE_DEGREE
+        			);
         
         mSensorManager = (SensorManager)this.getSystemService(SENSOR_SERVICE);
 		mAccelerometer =
@@ -128,8 +147,8 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		float roll = orientation[ROLL_INDEX] * DEGREES_PER_RADIAN;
 		Log.d("CowbellActivity", "Roll: " + roll);
 		
-		final int LEFT_DEGREE = -30;
-		final int RIGHT_DEGREE = 30;
+		final int LEFT_DEGREE = -TIPPING_POINT_IN_DEGREES;
+		final int RIGHT_DEGREE = TIPPING_POINT_IN_DEGREES;
 		
 		if(roll > LEFT_DEGREE && mRotatedLeft) {
 			mRotatedLeft = false;
