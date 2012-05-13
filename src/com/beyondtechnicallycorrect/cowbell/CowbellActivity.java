@@ -18,12 +18,13 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	private final int TIPPING_POINT_IN_DEGREES = 30;
 	
 	private ImageView mCowbellImage;
-	private boolean mRotatedLeft;
+	private RotationPosition mCurrentRotation;
 	private Animation mRotateToLeft;
 	private Animation mRotateFromLeft;
-	private boolean mRotatedRight;
 	private Animation mRotateToRight;
 	private Animation mRotateFromRight;
+	private Animation mRotateFromLeftToRight;
+	private Animation mRotateFromRightToLeft;
 	
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
@@ -42,7 +43,7 @@ public class CowbellActivity extends Activity implements SensorEventListener {
         
         final int CENTRE_DEGREE = 0;
         mCowbellImage = (ImageView)this.findViewById(R.id.cowbell);
-        mRotatedLeft = false;
+        mCurrentRotation = RotationPosition.CENTRE;
         mRotateToLeft =
         		new CowbellRotateAnimation(
         				CENTRE_DEGREE,
@@ -53,7 +54,6 @@ public class CowbellActivity extends Activity implements SensorEventListener {
         				TIPPING_POINT_IN_DEGREES,
         				CENTRE_DEGREE
         			);
-        mRotatedRight = false;
         mRotateToRight =
         		new CowbellRotateAnimation(
         				CENTRE_DEGREE,
@@ -63,6 +63,16 @@ public class CowbellActivity extends Activity implements SensorEventListener {
         		new CowbellRotateAnimation(
         				-TIPPING_POINT_IN_DEGREES,
         				CENTRE_DEGREE
+        			);
+        mRotateFromLeftToRight =
+        		new CowbellRotateAnimation(
+        				TIPPING_POINT_IN_DEGREES,
+        				-TIPPING_POINT_IN_DEGREES
+        			);
+        mRotateFromRightToLeft =
+        		new CowbellRotateAnimation(
+        				-TIPPING_POINT_IN_DEGREES,
+        				TIPPING_POINT_IN_DEGREES
         			);
         
         mSensorManager = (SensorManager)this.getSystemService(SENSOR_SERVICE);
@@ -149,23 +159,39 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		final int LEFT_DEGREE = -TIPPING_POINT_IN_DEGREES;
 		final int RIGHT_DEGREE = TIPPING_POINT_IN_DEGREES;
 		
-		if(roll > LEFT_DEGREE && mRotatedLeft) {
-			mRotatedLeft = false;
+		if(LEFT_DEGREE < roll && roll < RIGHT_DEGREE &&
+				mCurrentRotation == RotationPosition.LEFT) {
+			mCurrentRotation = RotationPosition.CENTRE;
 			mCowbellImage.startAnimation(mRotateFromLeft);
 		}
 		
-		if(roll < RIGHT_DEGREE && mRotatedRight) {
-			mRotatedRight = false;
+		if(LEFT_DEGREE < roll && roll < RIGHT_DEGREE &&
+				mCurrentRotation == RotationPosition.RIGHT) {
+			mCurrentRotation = RotationPosition.CENTRE;
 			mCowbellImage.startAnimation(mRotateFromRight);
 		}
 		
-		if(roll < LEFT_DEGREE && !mRotatedLeft) {
-			mRotatedLeft = true;
+		if(roll < LEFT_DEGREE &&
+				mCurrentRotation == RotationPosition.RIGHT) {
+			mCurrentRotation = RotationPosition.LEFT;
+			mCowbellImage.startAnimation(mRotateFromRightToLeft);
+		}
+		
+		if(roll > RIGHT_DEGREE &&
+				mCurrentRotation == RotationPosition.LEFT) {
+			mCurrentRotation = RotationPosition.RIGHT;
+			mCowbellImage.startAnimation(mRotateFromLeftToRight);
+		}
+		
+		if(roll < LEFT_DEGREE &&
+				mCurrentRotation == RotationPosition.CENTRE) {
+			mCurrentRotation = RotationPosition.LEFT;
 			mCowbellImage.startAnimation(mRotateToLeft);
 		}
 		
-		if(roll > RIGHT_DEGREE && !mRotatedRight) {
-			mRotatedRight = true;
+		if(roll > RIGHT_DEGREE &&
+				mCurrentRotation == RotationPosition.CENTRE) {
+			mCurrentRotation = RotationPosition.RIGHT;
 			mCowbellImage.startAnimation(mRotateToRight);
 		}
 		
