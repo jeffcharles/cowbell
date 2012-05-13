@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@string/cowbell_desc"
-        android:src="@drawable/cowbell_small" />
+        android:src="@drawable/cowbell_small"
+        android:id="@+id/cowbell" />
 
 </LinearLayout>

@@ -7,12 +7,23 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 /**
  * Activity for ringing a cowbell
  */
 public class CowbellActivity extends Activity implements SensorEventListener {
     
+	private ImageView mCowbellImage;
+	private boolean mRotatedLeft;
+	private Animation mRotateToLeft;
+	private Animation mRotateFromLeft;
+	private boolean mRotatedRight;
+	private Animation mRotateToRight;
+	private Animation mRotateFromRight;
+	
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
 	private Sensor mMagneticField;
@@ -27,6 +38,14 @@ public class CowbellActivity extends Activity implements SensorEventListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        mCowbellImage = (ImageView)this.findViewById(R.id.cowbell);
+        mRotatedLeft = false;
+        mRotateToLeft = AnimationUtils.loadAnimation(this, R.anim.rotate_left);
+        mRotateFromLeft = AnimationUtils.loadAnimation(this, R.anim.rotate_from_left);
+        mRotatedRight = false;
+        mRotateToRight = AnimationUtils.loadAnimation(this, R.anim.rotate_right);
+        mRotateFromRight = AnimationUtils.loadAnimation(this, R.anim.rotate_from_right);
         
         mSensorManager = (SensorManager)this.getSystemService(SENSOR_SERVICE);
 		mAccelerometer =
@@ -108,6 +127,26 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		final float DEGREES_PER_RADIAN = 57.2957795f;
 		float roll = orientation[ROLL_INDEX] * DEGREES_PER_RADIAN;
 		Log.d("CowbellActivity", "Roll: " + roll);
+		
+		final int LEFT_DEGREE = -30;
+		if(roll < LEFT_DEGREE && !mRotatedLeft) {
+			mRotatedLeft = true;
+			mCowbellImage.startAnimation(mRotateToLeft);
+		}
+		if(roll > LEFT_DEGREE && mRotatedLeft) {
+			mRotatedLeft = false;
+			mCowbellImage.startAnimation(mRotateFromLeft);
+		}
+		
+		final int RIGHT_DEGREE = 30;
+		if(roll > RIGHT_DEGREE && !mRotatedRight) {
+			mRotatedRight = true;
+			mCowbellImage.startAnimation(mRotateToRight);
+		}
+		if(roll < RIGHT_DEGREE && mRotatedRight) {
+			mRotatedRight = false;
+			mCowbellImage.startAnimation(mRotateFromRight);
+		}
 	}
     
     
