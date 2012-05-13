@@ -129,24 +129,28 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		Log.d("CowbellActivity", "Roll: " + roll);
 		
 		final int LEFT_DEGREE = -30;
-		if(roll < LEFT_DEGREE && !mRotatedLeft) {
-			mRotatedLeft = true;
-			mCowbellImage.startAnimation(mRotateToLeft);
-		}
+		final int RIGHT_DEGREE = 30;
+		
 		if(roll > LEFT_DEGREE && mRotatedLeft) {
 			mRotatedLeft = false;
 			mCowbellImage.startAnimation(mRotateFromLeft);
 		}
 		
-		final int RIGHT_DEGREE = 30;
-		if(roll > RIGHT_DEGREE && !mRotatedRight) {
-			mRotatedRight = true;
-			mCowbellImage.startAnimation(mRotateToRight);
-		}
 		if(roll < RIGHT_DEGREE && mRotatedRight) {
 			mRotatedRight = false;
 			mCowbellImage.startAnimation(mRotateFromRight);
 		}
+		
+		if(roll < LEFT_DEGREE && !mRotatedLeft) {
+			mRotatedLeft = true;
+			mCowbellImage.startAnimation(mRotateToLeft);
+		}
+		
+		if(roll > RIGHT_DEGREE && !mRotatedRight) {
+			mRotatedRight = true;
+			mCowbellImage.startAnimation(mRotateToRight);
+		}
+		
 	}
     
     
