@@ -2,4 +2,5 @@
 <rotate xmlns:android="http://schemas.android.com/apk/res/android"
     android:fromDegrees="0"
     android:toDegrees="30"
-    android:fillAfter="true" />
+    android:fillAfter="true"
+    android:duration="50" />
