@@ -109,12 +109,12 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		mSensorManager.registerListener(
 				this,
 				mAccelerometer,
-				SensorManager.SENSOR_DELAY_UI
+				SensorManager.SENSOR_DELAY_GAME
 			);
 		mSensorManager.registerListener(
 				this,
 				mMagneticField,
-				SensorManager.SENSOR_DELAY_UI
+				SensorManager.SENSOR_DELAY_GAME
 			);
 		mCowbellSound = MediaPlayer.create(this, R.raw.cowbell);
 	}
