@@ -35,6 +35,7 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	private float[] mGeomagneticVector;
 	
 	private MediaPlayer mCowbellSound;
+	private final Object mCowbellSoundLock = new Object();
 	
 	/**
 	 * Called when the activity is first created
@@ -93,7 +94,7 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		super.onPause();
 		mSensorManager.unregisterListener(this);
 		// Need to sync to avoid race condition with playing cowbell sound
-		synchronized (mCowbellSound) {
+		synchronized (mCowbellSoundLock) {
 			mCowbellSound.release();
 			mCowbellSound = null;
 		}
@@ -212,7 +213,7 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		
 		if(playCowbellSound) {
 			// Need to sync to prevent accessing a released cowbell sound
-			synchronized (mCowbellSound) {
+			synchronized (mCowbellSoundLock) {
 				if(mCowbellSound != null) {
 					mCowbellSound.start();
 				}
