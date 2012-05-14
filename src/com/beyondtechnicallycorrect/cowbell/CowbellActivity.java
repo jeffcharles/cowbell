@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.Animation;
@@ -32,6 +33,8 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	
 	private float[] mGravity;
 	private float[] mGeomagneticVector;
+	
+	private MediaPlayer mCowbellSound;
 	
 	/**
 	 * Called when the activity is first created
@@ -89,6 +92,11 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	protected void onPause() {
 		super.onPause();
 		mSensorManager.unregisterListener(this);
+		// Need to sync to avoid race condition with playing cowbell sound
+		synchronized (mCowbellSound) {
+			mCowbellSound.release();
+			mCowbellSound = null;
+		}
 	}
 
 	/**
@@ -107,6 +115,7 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 				mMagneticField,
 				SensorManager.SENSOR_DELAY_UI
 			);
+		mCowbellSound = MediaPlayer.create(this, R.raw.cowbell);
 	}
 
 	/**
@@ -159,6 +168,8 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		final int LEFT_DEGREE = -TIPPING_POINT_IN_DEGREES;
 		final int RIGHT_DEGREE = TIPPING_POINT_IN_DEGREES;
 		
+		boolean playCowbellSound = false;
+		
 		if(LEFT_DEGREE < roll && roll < RIGHT_DEGREE &&
 				mCurrentRotation == RotationPosition.LEFT) {
 			mCurrentRotation = RotationPosition.CENTRE;
@@ -175,24 +186,37 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 				mCurrentRotation == RotationPosition.RIGHT) {
 			mCurrentRotation = RotationPosition.LEFT;
 			mCowbellImage.startAnimation(mRotateFromRightToLeft);
+			playCowbellSound = true;
 		}
 		
 		if(roll > RIGHT_DEGREE &&
 				mCurrentRotation == RotationPosition.LEFT) {
 			mCurrentRotation = RotationPosition.RIGHT;
 			mCowbellImage.startAnimation(mRotateFromLeftToRight);
+			playCowbellSound = true;
 		}
 		
 		if(roll < LEFT_DEGREE &&
 				mCurrentRotation == RotationPosition.CENTRE) {
 			mCurrentRotation = RotationPosition.LEFT;
 			mCowbellImage.startAnimation(mRotateToLeft);
+			playCowbellSound = true;
 		}
 		
 		if(roll > RIGHT_DEGREE &&
 				mCurrentRotation == RotationPosition.CENTRE) {
 			mCurrentRotation = RotationPosition.RIGHT;
 			mCowbellImage.startAnimation(mRotateToRight);
+			playCowbellSound = true;
+		}
+		
+		if(playCowbellSound) {
+			// Need to sync to prevent accessing a released cowbell sound
+			synchronized (mCowbellSound) {
+				if(mCowbellSound != null) {
+					mCowbellSound.start();
+				}
+			}
 		}
 		
 	}
