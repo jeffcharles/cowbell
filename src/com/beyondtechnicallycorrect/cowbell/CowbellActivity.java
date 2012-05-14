@@ -220,6 +220,10 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 			// Need to sync to prevent accessing a released cowbell sound
 			synchronized (mCowbellSoundLock) {
 				if(mCowbellSound != null) {
+					if(mCowbellSound.isPlaying()) {
+						mCowbellSound.seekTo(0);
+						
+					}
 					mCowbellSound.start();
 				}
 			}
