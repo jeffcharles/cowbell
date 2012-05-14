@@ -106,6 +106,10 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		mGravity = null;
+		mGeomagneticVector = null;
+		
 		mSensorManager.registerListener(
 				this,
 				mAccelerometer,
@@ -116,6 +120,7 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 				mMagneticField,
 				SensorManager.SENSOR_DELAY_GAME
 			);
+		
 		mCowbellSound = MediaPlayer.create(this, R.raw.cowbell);
 	}
 
