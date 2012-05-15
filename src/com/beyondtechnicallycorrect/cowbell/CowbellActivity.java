@@ -39,6 +39,8 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	
 	private Normalizer mNormalizer;
 	
+	private boolean mProcessingOrientationChange;
+	
 	/**
 	 * Called when the activity is first created
 	 */
@@ -46,6 +48,8 @@ public class CowbellActivity extends Activity implements SensorEventListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        mProcessingOrientationChange = false;
         
         final int CENTRE_DEGREE = 0;
         mCowbellImage = (ImageView)this.findViewById(R.id.cowbell);
@@ -155,7 +159,12 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		float normalizedRoll = result.normalizedOrientation;
 		Log.d("CowbellActivity", "Roll: " + normalizedRoll);
 		
-		processOrientationChange(normalizedRoll);		
+		// could use lock for this but that seems like overkill
+		if(!mProcessingOrientationChange) {
+			mProcessingOrientationChange = true;
+			processOrientationChange(normalizedRoll);
+			mProcessingOrientationChange = false;
+		}
 	}
 	
 	private void populateSensorMembers(SensorEvent event) {
