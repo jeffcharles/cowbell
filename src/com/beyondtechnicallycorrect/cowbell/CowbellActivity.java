@@ -141,16 +141,40 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	 */
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+		
+		populateSensorMembers(event);
+		
+		if(mGravity == null || mGeomagneticVector == null) {
+			return;
+		}
+		
+		OrientationResult result = tryGetOrientationResult();
+		if(!result.succeeded) {
+			return;
+		}
+		float normalizedRoll = result.normalizedOrientation;
+		Log.d("CowbellActivity", "Roll: " + normalizedRoll);
+		
+		processOrientationChange(normalizedRoll);		
+	}
+	
+	private void populateSensorMembers(SensorEvent event) {
 		if(event.sensor == mAccelerometer) {
 			mGravity = event.values;
 		}
 		if(event.sensor == mMagneticField) {
 			mGeomagneticVector = event.values;
 		}
+	}
+	
+	private class OrientationResult {
+		public boolean succeeded;
+		public float normalizedOrientation;
+	}
+	
+	private OrientationResult tryGetOrientationResult() {
 		
-		if(mGravity == null || mGeomagneticVector == null) {
-			return;
-		}
+		OrientationResult result = new OrientationResult();
 		
 		final int R_CAPACITY = 9;
 		float[] rRotationMatrix = new float[R_CAPACITY];
@@ -163,7 +187,8 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 						mGeomagneticVector
 					);
 		if(!gotResult) {
-			return;
+			result.succeeded = false;
+			return result;
 		}
 		
 		final int ORIENTATION_CAPACITY = 3;
@@ -175,7 +200,13 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		float roll = orientation[ROLL_INDEX] * DEGREES_PER_RADIAN;
 		mNormalizer.AddValue(roll);
 		float normalizedRoll = mNormalizer.getNormalizedValue();
-		Log.d("CowbellActivity", "Roll: " + normalizedRoll);
+		
+		result.succeeded = true;
+		result.normalizedOrientation = normalizedRoll;
+		return result;
+	}
+	
+	private void processOrientationChange(float normalizedRoll) {
 		
 		final int LEFT_DEGREE = -TIPPING_POINT_IN_DEGREES;
 		final int RIGHT_DEGREE = TIPPING_POINT_IN_DEGREES;
@@ -234,8 +265,6 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 				}
 			}
 		}
-		
 	}
-    
     
 }
