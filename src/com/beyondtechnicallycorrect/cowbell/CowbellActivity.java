@@ -230,7 +230,8 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		float normalizedRoll = result.normalizedOrientation;
 		Log.d("CowbellActivity", "Roll: " + normalizedRoll);
 		
-		// could use lock for this but that seems like overkill
+		// If an orientation change is already in progress,
+		// then don't process this reading
 		if(!mProcessingOrientationChange) {
 			mProcessingOrientationChange = true;
 			processOrientationChange(normalizedRoll);
@@ -289,7 +290,7 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		return result;
 	}
 	
-	private void processOrientationChange(float roll) {
+	private synchronized void processOrientationChange(float roll) {
 		
 		final int FUZZY_FACTOR = 5;
 		
