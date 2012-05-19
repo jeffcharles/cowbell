@@ -30,6 +30,8 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
 	private Sensor mMagneticField;
+	private boolean mListenForAccelerometer;
+	private boolean mListenForMagneticField;
 	
 	private float[] mGravity;
 	private float[] mGeomagneticVector;
@@ -137,7 +139,16 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	 */
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// Do nothing
+		
+		boolean sensorAccurate =
+				accuracy == SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM ||
+				accuracy == SensorManager.SENSOR_STATUS_ACCURACY_HIGH;
+		if(sensor == mAccelerometer) {
+			mListenForAccelerometer = sensorAccurate;
+		}
+		if(sensor == mMagneticField) {
+			mListenForMagneticField = sensorAccurate;
+		}
 	}
 
 	/**
@@ -168,10 +179,11 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	}
 	
 	private void populateSensorMembers(SensorEvent event) {
-		if(event.sensor == mAccelerometer) {
+		
+		if(event.sensor == mAccelerometer && mListenForAccelerometer) {
 			mGravity = event.values;
 		}
-		if(event.sensor == mMagneticField) {
+		if(event.sensor == mMagneticField && mListenForMagneticField) {
 			mGeomagneticVector = event.values;
 		}
 	}
