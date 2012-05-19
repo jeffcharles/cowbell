@@ -48,7 +48,8 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	 */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        
+    	super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
         mProcessingOrientationChange = false;
@@ -99,6 +100,7 @@ public class CowbellActivity extends Activity implements SensorEventListener {
      */
 	@Override
 	protected void onPause() {
+		
 		super.onPause();
 		mSensorManager.unregisterListener(this);
 		// Need to sync to avoid race condition with playing cowbell sound
@@ -113,6 +115,7 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	 */
 	@Override
 	protected void onResume() {
+		
 		super.onResume();
 		
 		mNormalizer = new Normalizer();
@@ -286,7 +289,6 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 				if(mCowbellSound != null) {
 					if(mCowbellSound.isPlaying()) {
 						mCowbellSound.seekTo(0);
-						
 					}
 					mCowbellSound.start();
 				}
