@@ -199,11 +199,10 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		
 		final int R_CAPACITY = 9;
 		float[] rRotationMatrix = new float[R_CAPACITY];
-		float[] iRotationMatrix = null;
 		boolean gotResult =
 				SensorManager.getRotationMatrix(
 						rRotationMatrix, // out variable
-						iRotationMatrix, // out variable
+						null, // out variable
 						mGravity,
 						mGeomagneticVector
 					);
@@ -214,7 +213,10 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		
 		final int ORIENTATION_CAPACITY = 3;
 		float[] orientation = new float[ORIENTATION_CAPACITY];
-		SensorManager.getOrientation(rRotationMatrix, orientation);
+		SensorManager.getOrientation(
+				rRotationMatrix,
+				orientation // out variable
+			);
 		
 		final int ROLL_INDEX = 2;
 		final float DEGREES_PER_RADIAN = 57.2957795f;
