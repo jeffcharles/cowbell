@@ -1,6 +1,8 @@
 package com.beyondtechnicallycorrect.cowbell;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -8,6 +10,8 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 
@@ -15,6 +19,8 @@ import android.widget.ImageView;
  * Activity for ringing a cowbell
  */
 public class CowbellActivity extends Activity implements SensorEventListener {
+	
+	private final int DIALOG_ATTRIBUTION_ID = 0;
 	
 	private final int TIPPING_POINT_IN_DEGREES = 30;
 	
@@ -135,6 +141,57 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 			);
 		
 		mCowbellSound = MediaPlayer.create(this, R.raw.cowbell);
+	}
+
+	/**
+	 * Called when menu button pressed (pre-3.0) or when activity
+	 * created (post-3.0)
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		this.getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+	/**
+	 * Called when an options menu item is selected
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+			case R.id.attribution:
+				this.showDialog(DIALOG_ATTRIBUTION_ID);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	/**
+	 * Called when a dialog is created
+	 */
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		
+		switch (id) {
+			case DIALOG_ATTRIBUTION_ID:
+				Dialog dialog = createAttributionDialog();
+				return dialog;
+			default:
+				return super.onCreateDialog(id);
+		}
+	}
+	
+	private Dialog createAttributionDialog() {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder
+			.setMessage(R.string.attribution_text)
+			.setCancelable(true);
+		AlertDialog dialog = builder.create();
+		return dialog;
 	}
 
 	/**

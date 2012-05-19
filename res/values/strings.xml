@@ -4,5 +4,13 @@
     <string name="app_name">Cowbell</string>
     
     <string name="cowbell_desc">Cowbell</string>
+    
+    <string name="attribution_title">Attribution</string>
+    
+    <string name="attribution_text">
+        Cowbell image by bobjudge
+        \n\nhttp://www.flickr.com/photos/bobjudge/3570764982/sizes/o/in/photostream/
+        \n\nCreative Commons 2.0 license
+    </string>
 
 </resources>
