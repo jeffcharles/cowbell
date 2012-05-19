@@ -215,47 +215,51 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		return result;
 	}
 	
-	private void processOrientationChange(float normalizedRoll) {
+	private void processOrientationChange(float roll) {
 		
-		final int LEFT_DEGREE = -TIPPING_POINT_IN_DEGREES;
-		final int RIGHT_DEGREE = TIPPING_POINT_IN_DEGREES;
+		final int FUZZY_FACTOR = 5;
+		
+		final int TO_LEFT_DEGREE = -TIPPING_POINT_IN_DEGREES - FUZZY_FACTOR;
+		final int FROM_LEFT_DEGREE = -TIPPING_POINT_IN_DEGREES + FUZZY_FACTOR;
+		final int TO_RIGHT_DEGREE = TIPPING_POINT_IN_DEGREES + FUZZY_FACTOR;
+		final int FROM_RIGHT_DEGREE = TIPPING_POINT_IN_DEGREES - FUZZY_FACTOR;
 		
 		boolean playCowbellSound = false;
 		
-		if(LEFT_DEGREE < normalizedRoll && normalizedRoll < RIGHT_DEGREE &&
+		if(FROM_LEFT_DEGREE < roll && roll < TO_RIGHT_DEGREE &&
 				mCurrentRotation == RotationPosition.LEFT) {
 			mCurrentRotation = RotationPosition.CENTRE;
 			mCowbellImage.startAnimation(mRotateFromLeft);
 		}
 		
-		if(LEFT_DEGREE < normalizedRoll && normalizedRoll < RIGHT_DEGREE &&
+		if(TO_LEFT_DEGREE < roll && roll < FROM_RIGHT_DEGREE &&
 				mCurrentRotation == RotationPosition.RIGHT) {
 			mCurrentRotation = RotationPosition.CENTRE;
 			mCowbellImage.startAnimation(mRotateFromRight);
 		}
 		
-		if(normalizedRoll < LEFT_DEGREE &&
+		if(roll < TO_LEFT_DEGREE &&
 				mCurrentRotation == RotationPosition.RIGHT) {
 			mCurrentRotation = RotationPosition.LEFT;
 			mCowbellImage.startAnimation(mRotateFromRightToLeft);
 			playCowbellSound = true;
 		}
 		
-		if(normalizedRoll > RIGHT_DEGREE &&
+		if(roll > TO_RIGHT_DEGREE &&
 				mCurrentRotation == RotationPosition.LEFT) {
 			mCurrentRotation = RotationPosition.RIGHT;
 			mCowbellImage.startAnimation(mRotateFromLeftToRight);
 			playCowbellSound = true;
 		}
 		
-		if(normalizedRoll < LEFT_DEGREE &&
+		if(roll < TO_LEFT_DEGREE &&
 				mCurrentRotation == RotationPosition.CENTRE) {
 			mCurrentRotation = RotationPosition.LEFT;
 			mCowbellImage.startAnimation(mRotateToLeft);
 			playCowbellSound = true;
 		}
 		
-		if(normalizedRoll > RIGHT_DEGREE &&
+		if(roll > TO_RIGHT_DEGREE &&
 				mCurrentRotation == RotationPosition.CENTRE) {
 			mCurrentRotation = RotationPosition.RIGHT;
 			mCowbellImage.startAnimation(mRotateToRight);
