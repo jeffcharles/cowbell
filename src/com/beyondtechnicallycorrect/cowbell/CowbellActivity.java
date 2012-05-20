@@ -3,6 +3,7 @@ package com.beyondtechnicallycorrect.cowbell;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.AlertDialog.Builder;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 public class CowbellActivity extends Activity implements SensorEventListener {
 	
 	private final int DIALOG_ATTRIBUTION_ID = 0;
+	private final int DIALOG_INSTRUCTIONS_ID = 1;
 	
 	private final int TIPPING_POINT_IN_DEGREES = 30;
 	
@@ -164,6 +166,9 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 			case R.id.attribution:
 				this.showDialog(DIALOG_ATTRIBUTION_ID);
 				return true;
+			case R.id.instructions:
+				this.showDialog(DIALOG_INSTRUCTIONS_ID);
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -177,8 +182,11 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		
 		switch (id) {
 			case DIALOG_ATTRIBUTION_ID:
-				Dialog dialog = createAttributionDialog();
-				return dialog;
+				Dialog attributionDialog = createAttributionDialog();
+				return attributionDialog;
+			case DIALOG_INSTRUCTIONS_ID:
+				Dialog instructionsDialog = createInstructionsDialog();
+				return instructionsDialog;
 			default:
 				return super.onCreateDialog(id);
 		}
@@ -189,6 +197,16 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder
 			.setMessage(R.string.attribution_text)
+			.setCancelable(true);
+		AlertDialog dialog = builder.create();
+		return dialog;
+	}
+	
+	private Dialog createInstructionsDialog() {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder
+			.setMessage(R.string.instructions_text)
 			.setCancelable(true);
 		AlertDialog dialog = builder.create();
 		return dialog;

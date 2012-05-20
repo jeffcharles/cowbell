@@ -12,5 +12,11 @@
         \n\nhttp://www.flickr.com/photos/bobjudge/3570764982/sizes/o/in/photostream/
         \n\nCreative Commons 2.0 license
     </string>
+    
+    <string name="instructions_title">Instructions</string>
+    
+    <string name="instructions_text">
+        Rotate your phone from side-to-side to produce a cowbell sound
+    </string>
 
 </resources>
