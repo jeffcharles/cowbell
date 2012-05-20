@@ -3,7 +3,6 @@ package com.beyondtechnicallycorrect.cowbell;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.AlertDialog.Builder;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -194,19 +193,19 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	
 	private Dialog createAttributionDialog() {
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder
-			.setMessage(R.string.attribution_text)
-			.setCancelable(true);
-		AlertDialog dialog = builder.create();
-		return dialog;
+		return createDialog(R.string.attribution_text);
 	}
 	
 	private Dialog createInstructionsDialog() {
 		
+		return createDialog(R.string.instructions_text);
+	}
+	
+	private Dialog createDialog(int messageId) {
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder
-			.setMessage(R.string.instructions_text)
+			.setMessage(messageId)
 			.setCancelable(true);
 		AlertDialog dialog = builder.create();
 		return dialog;
