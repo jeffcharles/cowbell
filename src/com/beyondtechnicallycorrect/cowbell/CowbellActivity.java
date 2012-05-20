@@ -52,58 +52,58 @@ public class CowbellActivity extends Activity implements SensorEventListener {
 	/**
 	 * Called when the activity is first created
 	 */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        
-    	super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        
-        mProcessingOrientationChange = false;
-        
-        final int CENTRE_DEGREE = 0;
-        mCowbellImage = (ImageView)this.findViewById(R.id.cowbell);
-        mCurrentRotation = RotationPosition.CENTRE;
-        mRotateToLeft =
-        		new CowbellRotateAnimation(
-        				CENTRE_DEGREE,
-        				TIPPING_POINT_IN_DEGREES
-        			);
-        mRotateFromLeft =
-        		new CowbellRotateAnimation(
-        				TIPPING_POINT_IN_DEGREES,
-        				CENTRE_DEGREE
-        			);
-        mRotateToRight =
-        		new CowbellRotateAnimation(
-        				CENTRE_DEGREE,
-        				-TIPPING_POINT_IN_DEGREES
-        			);
-        mRotateFromRight =
-        		new CowbellRotateAnimation(
-        				-TIPPING_POINT_IN_DEGREES,
-        				CENTRE_DEGREE
-        			);
-        mRotateFromLeftToRight =
-        		new CowbellRotateAnimation(
-        				TIPPING_POINT_IN_DEGREES,
-        				-TIPPING_POINT_IN_DEGREES
-        			);
-        mRotateFromRightToLeft =
-        		new CowbellRotateAnimation(
-        				-TIPPING_POINT_IN_DEGREES,
-        				TIPPING_POINT_IN_DEGREES
-        			);
-        
-        mSensorManager = (SensorManager)this.getSystemService(SENSOR_SERVICE);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+
+		mProcessingOrientationChange = false;
+
+		final int CENTRE_DEGREE = 0;
+		mCowbellImage = (ImageView)this.findViewById(R.id.cowbell);
+		mCurrentRotation = RotationPosition.CENTRE;
+		mRotateToLeft =
+				new CowbellRotateAnimation(
+						CENTRE_DEGREE,
+						TIPPING_POINT_IN_DEGREES
+					);
+		mRotateFromLeft =
+				new CowbellRotateAnimation(
+						TIPPING_POINT_IN_DEGREES,
+						CENTRE_DEGREE
+					);
+		mRotateToRight =
+				new CowbellRotateAnimation(
+						CENTRE_DEGREE,
+						-TIPPING_POINT_IN_DEGREES
+					);
+		mRotateFromRight =
+				new CowbellRotateAnimation(
+						-TIPPING_POINT_IN_DEGREES,
+						CENTRE_DEGREE
+					);
+		mRotateFromLeftToRight =
+				new CowbellRotateAnimation(
+						TIPPING_POINT_IN_DEGREES,
+						-TIPPING_POINT_IN_DEGREES
+					);
+		mRotateFromRightToLeft =
+				new CowbellRotateAnimation(
+						-TIPPING_POINT_IN_DEGREES,
+						TIPPING_POINT_IN_DEGREES
+					);
+
+		mSensorManager = (SensorManager)this.getSystemService(SENSOR_SERVICE);
 		mAccelerometer =
 				mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		mMagneticField =
 				mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-    }
+	}
 
-    /**
-     * Called when the activity leaves the foreground
-     */
+	/**
+	 * Called when the activity leaves the foreground
+	 */
 	@Override
 	protected void onPause() {
 		
