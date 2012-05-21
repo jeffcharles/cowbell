@@ -8,7 +8,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 public class Normalizer {
 	
-	final int MAX_LENGTH = 5;
+	final int MAX_LENGTH = 8;
 	
 	private Queue<Float> mValues;
 	
